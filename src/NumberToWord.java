@@ -23,8 +23,8 @@ public class NumberToWord
             }
             else
             {
-                firstPart=checkTens(input.charAt(0));
-                secondPart=checkOnes(input.charAt(1));
+                secondPart=checkTens(input.charAt(0));
+                firstPart=checkOnes(input.charAt(1));
             }
         }
         if(input.length()==3)
@@ -145,47 +145,64 @@ public class NumberToWord
         }
     }
 
-    public static String numberConverter(String number)
+    public static String convertNumber(String number)
     {
         String toReturn = "";
-        if(number.length()>6)  ///number is in billions
+        String millions = "";
+        String thousands = "";
+        String ones = "";
+
+        if (number.length() > 6)  ///number is in millions
         {
-            String millions = number.substring(0, number.length()-6);
-            System.out.println("Million" +millions);
-            String thousands = number.substring(number.length()-6, number.length()-3);
-            System.out.println("Thousands" +thousands);
-            String ones = number.substring(number.length()-3, number.length());
-            System.out.println("Ones" + ones);
-            toReturn=checkThreeDigitNumber(millions)+"Million"+checkThreeDigitNumber(thousands)+"Thousand"+checkThreeDigitNumber(ones);
-        }
-        else if(number.length()>3)
+            millions = number.substring(0, number.length() - 6);
+            thousands = number.substring(number.length() - 6, number.length() - 3);
+            ones = number.substring(number.length() - 3, number.length());
+//            toReturn=checkThreeDigitNumber(millions)+"Million"+checkThreeDigitNumber(thousands)+"Thousand"+checkThreeDigitNumber(ones);
+        } else if (number.length() > 3)  //number is in hundred thousands
         {
-            String thousands = number.substring(0, number.length()-3);
-            System.out.println("Thousands" +thousands);
-            String ones = number.substring(number.length()-3, number.length());
-            System.out.println("Ones" + ones);
-            toReturn=checkThreeDigitNumber(thousands)+"Thousand"+checkThreeDigitNumber(ones);
-        }
-        else
+            thousands = number.substring(0, number.length() - 3);
+            ones = number.substring(number.length() - 3, number.length());
+//            toReturn=checkThreeDigitNumber(thousands)+"Thousand"+checkThreeDigitNumber(ones);
+        } else  //number is in hundreds
         {
-            if(number.equals("0"))
+            if (number.equals("0"))
             {
-                toReturn = "Zero";
-            }
-            else
+                ones = "Zero";
+            } else
             {
-                toReturn=checkThreeDigitNumber(number);
+                ones = number;
             }
         }
-        return toReturn+"Dollars";
+
+        return (convertToString(millions, thousands, ones));
+    }
+
+    public static String convertToString(String millions, String thousands, String ones)
+    {
+        millions = checkThreeDigitNumber(millions);
+        thousands = checkThreeDigitNumber(thousands);
+        ones = checkThreeDigitNumber(ones);
+
+        if(!millions.equals(""))
+        {
+            millions=millions+"Million";
+        }
+        if(!thousands.equals(""))
+        {
+            thousands=thousands+"Thousand";
+        }
+
+        return millions+thousands+ones+"Dollars";
+
     }
 
 
 
     public static void main(String[] args)
     {
-        String number = "915513999";
-        System.out.println(numberConverter(number));
+        String number = "612194567";
+        System.out.println(number);
+        System.out.println(convertNumber(number));
     }
 
 }
